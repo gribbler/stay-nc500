@@ -1,3 +1,5 @@
+import { unstable_cache } from "next/cache";
+
 export interface Event {
   id: string;
   title: string;
@@ -88,7 +90,7 @@ async function fetchTownEvents(town: string, key: string): Promise<Event[]> {
   try {
     const res = await fetch(`${DATATHISTLE_BASE}/events?${params.toString()}`, {
       headers: { Authorization: `Bearer ${key}` },
-      next: { revalidate: 86400 },
+      cache: "no-store",
     });
     if (!res.ok) return [];
     const data: DataThistleEvent[] = await res.json();
@@ -222,27 +224,31 @@ function getSampleEvents(): Event[] {
 // ---------------------------------------------------------------------------
 // Main export: getEvents()
 // Falls back to sample events if the API is not configured.
+// Cached for 24 hours via unstable_cache so the API is called at most once
+// per day regardless of deployment platform.
 // ---------------------------------------------------------------------------
-export async function getEvents(): Promise<{ events: Event[]; source: "api" | "sample" }> {
-  const apiEvents = await fetchFromDataThistle();
+export const getEvents = unstable_cache(
+  async (): Promise<{ events: Event[]; source: "api" | "sample" }> => {
+    const apiEvents = await fetchFromDataThistle();
 
-  if (apiEvents.length > 0) {
-    // Sort by start date and filter to upcoming events
+    if (apiEvents.length > 0) {
+      const now = new Date().toISOString().slice(0, 10);
+      const upcoming = apiEvents
+        .filter((e) => e.startDate >= now)
+        .sort((a, b) => a.startDate.localeCompare(b.startDate));
+      return { events: upcoming, source: "api" };
+    }
+
     const now = new Date().toISOString().slice(0, 10);
-    const upcoming = apiEvents
+    const sample = getSampleEvents()
       .filter((e) => e.startDate >= now)
       .sort((a, b) => a.startDate.localeCompare(b.startDate));
-    return { events: upcoming, source: "api" };
-  }
 
-  // Fallback: return sample events sorted by date
-  const now = new Date().toISOString().slice(0, 10);
-  const sample = getSampleEvents()
-    .filter((e) => e.startDate >= now)
-    .sort((a, b) => a.startDate.localeCompare(b.startDate));
-
-  return { events: sample, source: "sample" };
-}
+    return { events: sample, source: "sample" };
+  },
+  ["nc500-events"],
+  { revalidate: 86400 }
+);
 
 export function formatEventDate(startDate: string, endDate?: string): string {
   const start = new Date(startDate);
