@@ -10,23 +10,31 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
-const categoryStyles: Record<string, { dot: string; label: string }> = {
-  "Highland Games":      { dot: "bg-red-400",     label: "text-red-300 border-red-800" },
-  "Arts & Culture":      { dot: "bg-purple-400",   label: "text-purple-300 border-purple-800" },
-  "Science & Education": { dot: "bg-blue-400",     label: "text-blue-300 border-blue-800" },
-  Motoring:              { dot: "bg-orange-400",   label: "text-orange-300 border-orange-800" },
-  Music:                 { dot: "bg-green-400",    label: "text-green-300 border-green-800" },
-  "Nature & Wildlife":   { dot: "bg-emerald-400",  label: "text-emerald-300 border-emerald-800" },
-  Event:                 { dot: "bg-mist",         label: "text-mist border-dim" },
+const categoryStyles: Record<string, { dot: string; label: string; active: string }> = {
+  "Highland Games":      { dot: "bg-red-400",     label: "text-red-300 border-red-800",     active: "bg-red-900 text-red-200 border-red-600" },
+  "Arts & Culture":      { dot: "bg-purple-400",   label: "text-purple-300 border-purple-800", active: "bg-purple-900 text-purple-200 border-purple-600" },
+  "Science & Education": { dot: "bg-blue-400",     label: "text-blue-300 border-blue-800",   active: "bg-blue-900 text-blue-200 border-blue-600" },
+  Motoring:              { dot: "bg-orange-400",   label: "text-orange-300 border-orange-800", active: "bg-orange-900 text-orange-200 border-orange-600" },
+  Music:                 { dot: "bg-green-400",    label: "text-green-300 border-green-800",  active: "bg-green-900 text-green-200 border-green-600" },
+  "Nature & Wildlife":   { dot: "bg-emerald-400",  label: "text-emerald-300 border-emerald-800", active: "bg-emerald-900 text-emerald-200 border-emerald-600" },
+  Event:                 { dot: "bg-mist",         label: "text-mist border-dim",            active: "bg-elevated text-cream border-heather" },
 };
 
 function getCategoryStyle(cat: string) {
   return categoryStyles[cat] ?? categoryStyles["Event"];
 }
 
-export default async function EventsPage() {
+interface Props {
+  searchParams: Promise<{ category?: string }>;
+}
+
+export default async function EventsPage({ searchParams }: Props) {
+  const { category: activeCategory } = await searchParams;
   const { events, source } = await getEvents();
   const categories = [...new Set(events.map((e) => e.category))].sort();
+  const filtered = activeCategory
+    ? events.filter((e) => e.category === activeCategory)
+    : events;
 
   return (
     <main className="min-h-screen bg-highland">
@@ -108,26 +116,48 @@ export default async function EventsPage() {
           </div>
         ) : (
           <>
-            {/* Category legend */}
+            {/* Category filters */}
             <div className="mb-10 flex flex-wrap gap-3 items-center">
-              <span className="text-mist text-xs tracking-widest uppercase mr-1">Categories</span>
+              <span className="text-mist text-xs tracking-widest uppercase mr-1">Filter</span>
+
+              <Link
+                href="/events"
+                className={`text-xs px-3 py-1 border transition-colors ${
+                  !activeCategory
+                    ? "bg-elevated text-cream border-heather"
+                    : "text-mist border-dim hover:border-heather hover:text-cream"
+                }`}
+              >
+                All
+              </Link>
+
               {categories.map((cat) => {
                 const style = getCategoryStyle(cat);
+                const isActive = activeCategory === cat;
                 return (
-                  <span
+                  <Link
                     key={cat}
-                    className={`flex items-center gap-1.5 text-xs px-3 py-1 border ${style.label}`}
+                    href={isActive ? "/events" : `/events?category=${encodeURIComponent(cat)}`}
+                    className={`flex items-center gap-1.5 text-xs px-3 py-1 border transition-colors ${
+                      isActive ? style.active : `${style.label} hover:opacity-100 opacity-70`
+                    }`}
                   >
-                    <span className={`w-1.5 h-1.5 rounded-full ${style.dot}`} />
+                    <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${style.dot}`} />
                     {cat}
-                  </span>
+                  </Link>
                 );
               })}
+
+              {activeCategory && (
+                <span className="text-mist text-xs ml-2">
+                  {filtered.length} event{filtered.length !== 1 ? "s" : ""}
+                </span>
+              )}
             </div>
 
             {/* Events grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-dim">
-              {events.map((event) => {
+              {filtered.map((event) => {
                 const style = getCategoryStyle(event.category);
                 return (
                   <div
