@@ -1,5 +1,3 @@
-import { unstable_cache } from "next/cache";
-
 export interface Event {
   id: string;
   title: string;
@@ -222,13 +220,46 @@ function getSampleEvents(): Event[] {
 }
 
 // ---------------------------------------------------------------------------
+// Caching — works on Cloudflare Workers (Web Cache API) and Node.js dev
+// (in-memory). TTL is 24 hours.
+// ---------------------------------------------------------------------------
+const CACHE_TTL = 86400;
+const inMemory = new Map<string, { data: unknown; expires: number }>();
+
+async function withCache<T>(key: string, fn: () => Promise<T>): Promise<T> {
+  const cacheReq = new Request(`https://nc500-cache.internal/${key}`);
+
+  if (typeof caches !== "undefined") {
+    try {
+      const store = await caches.open("nc500");
+      const hit = await store.match(cacheReq);
+      if (hit) return hit.json() as Promise<T>;
+      const data = await fn();
+      await store.put(
+        cacheReq,
+        new Response(JSON.stringify(data), {
+          headers: { "Cache-Control": `max-age=${CACHE_TTL}` },
+        })
+      );
+      return data;
+    } catch {
+      // fall through to in-memory
+    }
+  }
+
+  const mem = inMemory.get(key);
+  if (mem && Date.now() < mem.expires) return mem.data as T;
+  const data = await fn();
+  inMemory.set(key, { data, expires: Date.now() + CACHE_TTL * 1000 });
+  return data;
+}
+
+// ---------------------------------------------------------------------------
 // Main export: getEvents()
 // Falls back to sample events if the API is not configured.
-// Cached for 24 hours via unstable_cache so the API is called at most once
-// per day regardless of deployment platform.
 // ---------------------------------------------------------------------------
-export const getEvents = unstable_cache(
-  async (): Promise<{ events: Event[]; source: "api" | "sample" }> => {
+export async function getEvents(): Promise<{ events: Event[]; source: "api" | "sample" }> {
+  return withCache("events-v1", async () => {
     const apiEvents = await fetchFromDataThistle();
 
     if (apiEvents.length > 0) {
@@ -236,7 +267,7 @@ export const getEvents = unstable_cache(
       const upcoming = apiEvents
         .filter((e) => e.startDate >= now)
         .sort((a, b) => a.startDate.localeCompare(b.startDate));
-      return { events: upcoming, source: "api" };
+      return { events: upcoming, source: "api" as const };
     }
 
     const now = new Date().toISOString().slice(0, 10);
@@ -244,11 +275,9 @@ export const getEvents = unstable_cache(
       .filter((e) => e.startDate >= now)
       .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
-    return { events: sample, source: "sample" };
-  },
-  ["nc500-events"],
-  { revalidate: 86400 }
-);
+    return { events: sample, source: "sample" as const };
+  });
+}
 
 export function formatEventDate(startDate: string, endDate?: string): string {
   const start = new Date(startDate);
