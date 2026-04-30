@@ -1,26 +1,66 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* ─── Highland Colour Palette ───────────────────────────────────────────── */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Backgrounds — dark to darkest */
+  --color-highland:       #0b0e15;
+  --color-surface:        #131720;
+  --color-elevated:       #1a2030;
+  --color-panel:          #222840;
+
+  /* Heather purple */
+  --color-heather:        #7c6b8c;
+  --color-heather-light:  #a892bb;
+  --color-heather-dim:    #2e2638;
+
+  /* Scottish gold / amber */
+  --color-gold:           #c9903a;
+  --color-gold-light:     #e4b060;
+  --color-gold-dim:       #3d2e14;
+
+  /* Text */
+  --color-cream:          #f0e8d6;
+  --color-cream-dim:      #b8a98e;
+  --color-mist:           #6b7d94;
+
+  /* Borders */
+  --color-dim:            #252d40;
+  --color-dim-soft:       #1e2535;
+
+  /* Fonts */
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
+  --font-sans:    var(--font-geist-sans), system-ui, Arial, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* ─── Base ──────────────────────────────────────────────────────────────── */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0b0e15;
+  color: #f0e8d6;
+}
+
+/* Atmospheric noise grain overlay — adds depth to dark sections */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+/* Decorative thin rule */
+.rule-gold {
+  display: block;
+  width: 3rem;
+  height: 1px;
+  background: linear-gradient(90deg, #c9903a, transparent);
+  margin-bottom: 1.25rem;
+}
+
+.rule-heather {
+  display: block;
+  width: 3rem;
+  height: 1px;
+  background: linear-gradient(90deg, #7c6b8c, transparent);
+  margin-bottom: 1.25rem;
 }
