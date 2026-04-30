@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { towns, getTownBySlug } from "@/data/towns";
+import { getEvents, formatEventDate } from "@/lib/events";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -33,6 +34,11 @@ export default async function TownPage({ params }: Props) {
   const bookingUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(
     town.name + ", Scotland"
   )}&lang=en-gb`;
+
+  const { events } = await getEvents();
+  const townEvents = events.filter(
+    (e) => e.town?.toLowerCase() === town.name.toLowerCase()
+  );
 
   return (
     <main className="min-h-screen bg-highland">
@@ -99,6 +105,58 @@ export default async function TownPage({ params }: Props) {
               <p className="text-heather-light text-xs tracking-[0.2em] uppercase mb-4">Getting There</p>
               <p className="text-cream-dim text-sm leading-relaxed">{town.gettingThere}</p>
             </section>
+
+            {/* Upcoming Events */}
+            {townEvents.length > 0 && (
+              <section className="bg-surface border border-dim p-8">
+                <div className="flex items-center justify-between mb-5">
+                  <p className="text-heather-light text-xs tracking-[0.2em] uppercase">Upcoming Events</p>
+                  <Link
+                    href={`/events?category=`}
+                    className="text-mist hover:text-gold text-xs tracking-widest uppercase transition-colors"
+                  >
+                    All events &rarr;
+                  </Link>
+                </div>
+                <ul className="space-y-4">
+                  {townEvents.slice(0, 5).map((event) => (
+                    <li key={event.id} className="border-t border-dim pt-4 first:border-t-0 first:pt-0">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-cream text-sm font-medium leading-snug mb-1">
+                            {event.title}
+                          </p>
+                          <p className="text-gold text-xs uppercase tracking-wider">
+                            {formatEventDate(event.startDate, event.endDate)}
+                          </p>
+                          {event.location && event.location !== town.name && (
+                            <p className="text-mist text-xs mt-0.5">{event.location}</p>
+                          )}
+                        </div>
+                        {event.url && (
+                          <a
+                            href={event.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gold hover:text-gold-light text-xs uppercase tracking-wide flex-shrink-0 transition-colors"
+                          >
+                            Details &rarr;
+                          </a>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                {townEvents.length > 5 && (
+                  <Link
+                    href="/events"
+                    className="mt-5 inline-block text-mist hover:text-gold text-xs tracking-widest uppercase transition-colors"
+                  >
+                    +{townEvents.length - 5} more events &rarr;
+                  </Link>
+                )}
+              </section>
+            )}
 
             {/* Accommodation */}
             <section className="bg-surface border border-dim p-8">
