@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "Discover festivals, Highland Games, wildlife events, and more happening along the North Coast 500 route in Scotland.",
 };
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 const categoryStyles: Record<string, { dot: string; label: string; active: string }> = {
   "Highland Games":      { dot: "bg-red-400",     label: "text-red-300 border-red-800",     active: "bg-red-900 text-red-200 border-red-600" },

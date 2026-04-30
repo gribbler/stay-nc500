@@ -88,7 +88,7 @@ async function fetchTownEvents(town: string, key: string): Promise<Event[]> {
   try {
     const res = await fetch(`${DATATHISTLE_BASE}/events?${params.toString()}`, {
       headers: { Authorization: `Bearer ${key}` },
-      next: { revalidate: 3600 },
+      next: { revalidate: 86400 },
     });
     if (!res.ok) return [];
     const data: DataThistleEvent[] = await res.json();
