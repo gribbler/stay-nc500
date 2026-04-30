@@ -27,54 +27,95 @@ export interface Event {
 const DATATHISTLE_API_KEY = process.env.DATATHISTLE_API_KEY;
 const DATATHISTLE_BASE = "https://api.datathistle.com/v1";
 
+const NC500_TOWNS = [
+  "Inverness", "Ullapool", "Durness", "Thurso", "Wick",
+  "Dornoch", "Gairloch", "Torridon", "Applecross", "Lochinver",
+  "Tongue", "Golspie", "Tain", "Scourie", "Lairg",
+];
+
+interface DataThistlePlace {
+  name?: string;
+  town?: string;
+  postal_code?: string;
+}
+
+interface DataThistleSchedule {
+  start_ts?: string;
+  end_ts?: string;
+  place?: DataThistlePlace;
+  tags?: string[];
+}
+
 interface DataThistleEvent {
-  id: string;
+  event_id: string;
   name: string;
-  description?: string;
-  startDate: string;
-  endDate?: string;
-  location?: {
-    name?: string;
-    address?: { addressLocality?: string };
+  descriptions?: { type: string; description: string }[];
+  schedules?: DataThistleSchedule[];
+  tags?: string[];
+  website?: string;
+  links?: { url: string; type: string }[];
+  images?: { url: string }[];
+}
+
+function mapEvent(e: DataThistleEvent): Event {
+  const schedule = e.schedules?.[0] ?? {};
+  const place = schedule.place ?? {};
+  const description = e.descriptions?.find((d) => d.description)?.description ?? "";
+  const tags = [...(e.tags ?? []), ...(schedule.tags ?? [])];
+  const category = tags[0]
+    ? tags[0].charAt(0).toUpperCase() + tags[0].slice(1)
+    : "Event";
+  const url =
+    e.website ||
+    e.links?.find((l) => l.type === "booking" || l.type === "info")?.url;
+
+  return {
+    id: e.event_id,
+    title: e.name,
+    description: description.slice(0, 500),
+    startDate: schedule.start_ts?.slice(0, 10) ?? "",
+    endDate: schedule.end_ts?.slice(0, 10),
+    location: place.name ?? place.town ?? "Scottish Highlands",
+    town: place.town,
+    category,
+    url,
+    imageUrl: e.images?.[0]?.url,
   };
-  category?: string;
-  url?: string;
-  image?: string;
+}
+
+async function fetchTownEvents(town: string, key: string): Promise<Event[]> {
+  const params = new URLSearchParams({ country: "GB", town, limit: "50" });
+  try {
+    const res = await fetch(`${DATATHISTLE_BASE}/events?${params.toString()}`, {
+      headers: { Authorization: `Bearer ${key}` },
+      next: { revalidate: 3600 },
+    });
+    if (!res.ok) return [];
+    const data: DataThistleEvent[] = await res.json();
+    return Array.isArray(data) ? data.map(mapEvent) : [];
+  } catch {
+    return [];
+  }
 }
 
 async function fetchFromDataThistle(): Promise<Event[]> {
-  if (!DATATHISTLE_API_KEY) {
-    return [];
+  if (!DATATHISTLE_API_KEY) return [];
+
+  const results = await Promise.all(
+    NC500_TOWNS.map((town) => fetchTownEvents(town, DATATHISTLE_API_KEY!))
+  );
+
+  const seen = new Set<string>();
+  const events: Event[] = [];
+  for (const batch of results) {
+    for (const e of batch) {
+      if (!seen.has(e.id)) {
+        seen.add(e.id);
+        events.push(e);
+      }
+    }
   }
-
-  const params = new URLSearchParams({
-    apikey: DATATHISTLE_API_KEY,
-    region: "Highland",
-    limit: "50",
-    sort: "startDate",
-  });
-
-  const res = await fetch(`${DATATHISTLE_BASE}/events?${params.toString()}`, {
-    next: { revalidate: 3600 }, // Re-fetch every hour
-  });
-
-  if (!res.ok) return [];
-
-  const data = await res.json();
-  const events: DataThistleEvent[] = data.events ?? data.data ?? [];
-
-  return events.map((e) => ({
-    id: e.id,
-    title: e.name,
-    description: e.description ?? "",
-    startDate: e.startDate,
-    endDate: e.endDate,
-    location: e.location?.name ?? e.location?.address?.addressLocality ?? "Scottish Highlands",
-    town: e.location?.address?.addressLocality,
-    category: e.category ?? "Event",
-    url: e.url,
-    imageUrl: e.image,
-  }));
+  return events;
 }
 
 // ---------------------------------------------------------------------------
