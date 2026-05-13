@@ -15,9 +15,7 @@ const destinations = [
   { name: "Lochinver", bookingQuery: "Lochinver, Scotland" },
 ];
 
-// Replace with your Booking.com affiliate ID once registered
-// Sign up at: https://www.booking.com/affiliate-program/v2/index.html
-const AFFILIATE_ID = "YOUR_AFFILIATE_ID";
+const AFFILIATE_ID = "2848401";
 
 function buildBookingUrl(destination: string, checkIn?: string, checkOut?: string): string {
   const params = new URLSearchParams({
