@@ -94,13 +94,12 @@ async function fetchFromDataThistle(): Promise<Event[]> {
   });
 
   const all: DataThistleEvent[] = [];
-  let url: string | null = `${DATATHISTLE_BASE}/events?${baseParams.toString()}`;
-  const MAX_PAGES = 25; // safety cap
-  let pages = 0;
+  const MAX_PAGES = 25;
 
   try {
-    while (url && pages < MAX_PAGES) {
-      const res: Response = await fetch(url, {
+    for (let page = 1; page <= MAX_PAGES; page++) {
+      const pageUrl = `${DATATHISTLE_BASE}/events?${baseParams.toString()}&page=${page}`;
+      const res = await fetch(pageUrl, {
         headers: { Authorization: `Bearer ${DATATHISTLE_API_KEY}` },
         cache: "no-store",
       });
@@ -108,8 +107,7 @@ async function fetchFromDataThistle(): Promise<Event[]> {
       const data: DataThistleEvent[] = await res.json();
       if (!Array.isArray(data) || data.length === 0) break;
       all.push(...data);
-      url = res.headers.get("x-next");
-      pages++;
+      if (!res.headers.get("x-next")) break;
     }
   } catch {
     // return whatever we managed to collect
