@@ -257,20 +257,21 @@ async function withCache<T>(key: string, fn: () => Promise<T>): Promise<T> {
 // Falls back to sample events if the API is not configured.
 // ---------------------------------------------------------------------------
 export async function getEvents(): Promise<{ events: Event[]; source: "api" | "sample" }> {
-  return withCache("events-v1", async () => {
+  return withCache("events-v3", async () => {
     const apiEvents = await fetchFromDataThistle();
 
     if (apiEvents.length > 0) {
       const now = new Date().toISOString().slice(0, 10);
+      // Keep events that haven't fully ended yet (ongoing multi-day events included)
       const upcoming = apiEvents
-        .filter((e) => e.startDate >= now)
+        .filter((e) => (e.endDate ?? e.startDate) >= now)
         .sort((a, b) => a.startDate.localeCompare(b.startDate));
       return { events: upcoming, source: "api" as const };
     }
 
     const now = new Date().toISOString().slice(0, 10);
     const sample = getSampleEvents()
-      .filter((e) => e.startDate >= now)
+      .filter((e) => (e.endDate ?? e.startDate) >= now)
       .sort((a, b) => a.startDate.localeCompare(b.startDate));
 
     return { events: sample, source: "sample" as const };
