@@ -120,7 +120,7 @@ export default function BookingWidget() {
         </div>
       </div>
 
-      {/* Map widget area */}
+      {/* Map */}
       <div className="bg-surface border-t border-dim p-8">
         <div className="flex items-start justify-between mb-6">
           <div>
@@ -129,68 +129,31 @@ export default function BookingWidget() {
               className="text-cream text-xl"
               style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}
             >
-              NC500 Accommodation Map
+              NC500 Route Map
             </h3>
           </div>
-        </div>
-
-        {/*
-          ── Booking.com Map Widget ──────────────────────────────────────────
-          To enable the live map:
-          1. Join the Booking.com Affiliate Programme: booking.com/affiliate-program
-          2. Go to Tools › Map Widget in your affiliate dashboard
-          3. Generate a widget for "Scottish Highlands" and replace the block below
-
-          Example of the widget code you'll receive:
-          <div id="booking_searchbox_container">
-            <script src="https://www.booking.com/affiliate/prelanding?..."></script>
-          </div>
-          ────────────────────────────────────────────────────────────────────
-        */}
-        <div
-          className="border border-dim aspect-video flex flex-col items-center justify-center text-center p-8 gap-5"
-          style={{
-            background: "linear-gradient(135deg, #161c27 0%, #1a1530 100%)",
-          }}
-        >
-          <div
-            className="text-heather text-5xl font-light"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
-            ◈
-          </div>
-          <div>
-            <p
-              className="text-cream text-lg mb-2"
-              style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}
-            >
-              Live Booking.com Map Widget
-            </p>
-            <p className="text-mist text-sm max-w-md leading-relaxed">
-              Join the{" "}
-              <a
-                href="https://www.booking.com/affiliate-program/v2/index.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gold hover:text-gold-light underline underline-offset-2"
-              >
-                Booking.com Affiliate Programme
-              </a>{" "}
-              to embed a live interactive map showing real-time availability and prices
-              for all accommodation along the NC500.
-            </p>
-          </div>
           <a
-            href="https://www.booking.com/searchresults.html?ss=Scottish+Highlands&lang=en-gb"
+            href="https://www.openstreetmap.org/#map=8/58.012/-4.45"
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-gold text-gold hover:bg-gold hover:text-highland text-xs font-semibold px-6 py-2.5 transition-colors uppercase tracking-widest"
+            className="text-mist hover:text-gold text-xs tracking-widest uppercase transition-colors"
           >
-            Browse on Booking.com
+            Open full map ↗
           </a>
         </div>
 
+        <div className="border border-dim overflow-hidden aspect-video">
+          <iframe
+            src="https://www.openstreetmap.org/export/embed.html?bbox=-6.2%2C57.3%2C-2.8%2C58.8&layer=mapnik"
+            className="w-full h-full"
+            style={{ border: 0, filter: "invert(0.9) hue-rotate(180deg) saturate(0.6) brightness(0.85)" }}
+            loading="lazy"
+            title="NC500 Route Map"
+          />
+        </div>
+
         <p className="text-mist text-xs mt-4">
+          Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-cream">OpenStreetMap</a> contributors.
           Results open on Booking.com. Stay NC500 may earn a commission on bookings made via our affiliate links.
         </p>
       </div>
