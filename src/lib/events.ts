@@ -27,11 +27,11 @@ export interface Event {
 const DATATHISTLE_API_KEY = process.env.DATATHISTLE_API_KEY;
 const DATATHISTLE_BASE = "https://api.datathistle.com/v1";
 
-const NC500_TOWNS = [
-  "Inverness", "Ullapool", "Durness", "Thurso", "Wick",
-  "Dornoch", "Gairloch", "Torridon", "Applecross", "Lochinver",
-  "Tongue", "Golspie", "Tain", "Scourie", "Lairg",
-];
+// Lairg is the geographic centre of the NC500 route.
+// 40 miles ≈ 64 km covers the full Highland circuit.
+const LAIRG_LAT = 58.0167;
+const LAIRG_LNG = -4.4167;
+const RADIUS_KM = 64;
 
 interface DataThistlePlace {
   name?: string;
@@ -83,11 +83,19 @@ function mapEvent(e: DataThistleEvent): Event {
   };
 }
 
-async function fetchTownEvents(town: string, key: string): Promise<Event[]> {
-  const params = new URLSearchParams({ country: "GB", town, limit: "50" });
+async function fetchFromDataThistle(): Promise<Event[]> {
+  if (!DATATHISTLE_API_KEY) return [];
+
+  const params = new URLSearchParams({
+    lat: String(LAIRG_LAT),
+    lng: String(LAIRG_LNG),
+    distance: String(RADIUS_KM),
+    limit: "200",
+  });
+
   try {
     const res = await fetch(`${DATATHISTLE_BASE}/events?${params.toString()}`, {
-      headers: { Authorization: `Bearer ${key}` },
+      headers: { Authorization: `Bearer ${DATATHISTLE_API_KEY}` },
       cache: "no-store",
     });
     if (!res.ok) return [];
@@ -96,26 +104,7 @@ async function fetchTownEvents(town: string, key: string): Promise<Event[]> {
   } catch {
     return [];
   }
-}
 
-async function fetchFromDataThistle(): Promise<Event[]> {
-  if (!DATATHISTLE_API_KEY) return [];
-
-  const results = await Promise.all(
-    NC500_TOWNS.map((town) => fetchTownEvents(town, DATATHISTLE_API_KEY!))
-  );
-
-  const seen = new Set<string>();
-  const events: Event[] = [];
-  for (const batch of results) {
-    for (const e of batch) {
-      if (!seen.has(e.id)) {
-        seen.add(e.id);
-        events.push(e);
-      }
-    }
-  }
-  return events;
 }
 
 // ---------------------------------------------------------------------------
