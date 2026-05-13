@@ -100,7 +100,7 @@ async function fetchFromDataThistle(): Promise<Event[]> {
 
   try {
     while (url && pages < MAX_PAGES) {
-      const res = await fetch(url, {
+      const res: Response = await fetch(url, {
         headers: { Authorization: `Bearer ${DATATHISTLE_API_KEY}` },
         cache: "no-store",
       });
