@@ -29,9 +29,9 @@ const DATATHISTLE_BASE = "https://api.datathistle.com/v1";
 
 // Lairg is the geographic centre of the NC500 route.
 // 40 miles ≈ 64 km covers the full Highland circuit.
-const LAIRG_LAT = 58.0167;
-const LAIRG_LNG = -4.4167;
-const RADIUS_KM = 64;
+const LAIRG_LAT = 58.0126; // geographic centre of NC500 bounding box
+const LAIRG_LNG = -4.4505;
+const RADIUS_KM = 103; // 64 miles — covers full NC500 circuit
 
 interface DataThistlePlace {
   name?: string;
