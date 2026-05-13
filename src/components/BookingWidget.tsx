@@ -120,43 +120,6 @@ export default function BookingWidget() {
         </div>
       </div>
 
-      {/* Map */}
-      <div className="bg-surface border-t border-dim p-8">
-        <div className="flex items-start justify-between mb-6">
-          <div>
-            <p className="text-heather-light text-xs tracking-[0.2em] uppercase mb-2">Interactive Map</p>
-            <h3
-              className="text-cream text-xl"
-              style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}
-            >
-              NC500 Route Map
-            </h3>
-          </div>
-          <a
-            href="https://www.openstreetmap.org/#map=8/58.012/-4.45"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-mist hover:text-gold text-xs tracking-widest uppercase transition-colors"
-          >
-            Open full map ↗
-          </a>
-        </div>
-
-        <div className="border border-dim overflow-hidden aspect-video">
-          <iframe
-            src="https://www.openstreetmap.org/export/embed.html?bbox=-6.2%2C57.3%2C-2.8%2C58.8&layer=mapnik"
-            className="w-full h-full"
-            style={{ border: 0, filter: "invert(0.9) hue-rotate(180deg) saturate(0.6) brightness(0.85)" }}
-            loading="lazy"
-            title="NC500 Route Map"
-          />
-        </div>
-
-        <p className="text-mist text-xs mt-4">
-          Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-cream">OpenStreetMap</a> contributors.
-          Results open on Booking.com. Stay NC500 may earn a commission on bookings made via our affiliate links.
-        </p>
-      </div>
     </div>
   );
 }

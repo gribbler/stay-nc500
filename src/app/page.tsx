@@ -129,7 +129,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-dim">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-dim">
             {[
               {
                 href: "/accommodation",
@@ -146,8 +146,15 @@ export default function HomePage() {
                   "Detailed guides to every major stop on the route — from Inverness to Durness. Highlights, what to see, how to get there, and insider tips.",
               },
               {
-                href: "/events",
+                href: "/itineraries",
                 number: "03",
+                title: "Itineraries",
+                description:
+                  "Six ready-made road trip plans — from a fast 5-day circuit to a leisurely 10-day exploration. Find the route that fits your schedule and style.",
+              },
+              {
+                href: "/events",
+                number: "04",
                 title: "Events",
                 description:
                   "Highland Games, folk festivals, wildlife weekends, and craft fairs. Auto-updated daily from the official VisitScotland events database.",
