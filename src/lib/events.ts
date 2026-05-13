@@ -86,25 +86,36 @@ function mapEvent(e: DataThistleEvent): Event {
 async function fetchFromDataThistle(): Promise<Event[]> {
   if (!DATATHISTLE_API_KEY) return [];
 
-  const params = new URLSearchParams({
+  const baseParams = new URLSearchParams({
     lat: String(LAIRG_LAT),
     lng: String(LAIRG_LNG),
     distance: String(RADIUS_KM),
-    limit: "200",
+    limit: "20",
   });
 
+  const all: DataThistleEvent[] = [];
+  let url: string | null = `${DATATHISTLE_BASE}/events?${baseParams.toString()}`;
+  const MAX_PAGES = 25; // safety cap
+  let pages = 0;
+
   try {
-    const res = await fetch(`${DATATHISTLE_BASE}/events?${params.toString()}`, {
-      headers: { Authorization: `Bearer ${DATATHISTLE_API_KEY}` },
-      cache: "no-store",
-    });
-    if (!res.ok) return [];
-    const data: DataThistleEvent[] = await res.json();
-    return Array.isArray(data) ? data.map(mapEvent) : [];
+    while (url && pages < MAX_PAGES) {
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${DATATHISTLE_API_KEY}` },
+        cache: "no-store",
+      });
+      if (!res.ok) break;
+      const data: DataThistleEvent[] = await res.json();
+      if (!Array.isArray(data) || data.length === 0) break;
+      all.push(...data);
+      url = res.headers.get("x-next");
+      pages++;
+    }
   } catch {
-    return [];
+    // return whatever we managed to collect
   }
 
+  return all.map(mapEvent);
 }
 
 // ---------------------------------------------------------------------------
