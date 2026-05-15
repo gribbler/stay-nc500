@@ -21,5 +21,9 @@
   },
   "observability": {
     "enabled": true
+  },
+  "vars": {
+    "CONTENTFUL_SPACE_ID": "8u50htcddaej",
+    "CONTENTFUL_DELIVERY_TOKEN": "XGRZnTnaK44c2Y0Gk1UZOJGDUE-sQyzPjk0BfecGj8s"
   }
 }
