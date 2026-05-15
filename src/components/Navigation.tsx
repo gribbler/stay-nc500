@@ -8,7 +8,9 @@ import ThistleIcon from "./ThistleIcon";
 const navLinks = [
   { href: "/accommodation", label: "Accommodation" },
   { href: "/towns", label: "Towns & Places" },
+  { href: "/camping", label: "Camping" },
   { href: "/itineraries", label: "Itineraries" },
+  { href: "/plan", label: "Plan Trip" },
   { href: "/blog", label: "Blog" },
   { href: "/events", label: "Events" },
 ];

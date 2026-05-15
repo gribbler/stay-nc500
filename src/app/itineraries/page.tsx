@@ -434,13 +434,19 @@ export default function ItinerariesPage() {
                     Ready to book?
                   </p>
                   <p className="text-mist text-xs mb-5 leading-relaxed">
-                    Search accommodation at every stop on this route.
+                    Get pre-filled Booking.com links for every overnight stop — dates auto-calculated.
                   </p>
                   <Link
-                    href="/accommodation"
-                    className="block bg-gold hover:bg-gold-light text-highland text-xs font-semibold px-4 py-3 transition-colors uppercase tracking-widest"
+                    href={`/plan?itinerary=${it.id}`}
+                    className="block bg-gold hover:bg-gold-light text-highland text-xs font-semibold px-4 py-3 transition-colors uppercase tracking-widest mb-2"
                   >
-                    Find Accommodation
+                    Plan &amp; Book This Trip
+                  </Link>
+                  <Link
+                    href="/accommodation"
+                    className="block border border-dim hover:border-heather text-mist hover:text-cream text-xs px-4 py-2.5 transition-colors uppercase tracking-widest"
+                  >
+                    Browse All Accommodation
                   </Link>
                 </div>
               </div>
