@@ -1,12 +1,14 @@
 import { createClient } from "contentful";
 
 // ---------------------------------------------------------------------------
-// Client
+// Client — lazy so env vars are read at request time, not build time
 // ---------------------------------------------------------------------------
-const client = createClient({
-  space: process.env.CONTENTFUL_SPACE_ID!,
-  accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN!,
-});
+function getClient() {
+  return createClient({
+    space: process.env.CONTENTFUL_SPACE_ID!,
+    accessToken: process.env.CONTENTFUL_DELIVERY_TOKEN!,
+  });
+}
 
 // ---------------------------------------------------------------------------
 // Types
@@ -43,7 +45,7 @@ function mapEntry(entry: any): BlogPost {
 // Queries
 // ---------------------------------------------------------------------------
 export async function getAllPosts(): Promise<BlogPost[]> {
-  const res = await client.getEntries({
+  const res = await getClient().getEntries({
     content_type: "blogPost",
     order: ["-fields.publishedDate"],
     limit: 100,
@@ -52,7 +54,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const res = await client.getEntries({
+  const res = await getClient().getEntries({
     content_type: "blogPost",
     "fields.slug": slug,
     limit: 1,
