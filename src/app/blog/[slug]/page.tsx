@@ -1,67 +1,40 @@
-"use client";
-
-import { useEffect, useState } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import {
+  getAllPosts,
+  getPostBySlug,
   categoryLabels,
   categoryColours,
   formatPostDate,
-  type BlogPost,
 } from "@/lib/contentful";
 
-// Individual post page — fetches its data from the /api/blog/[slug] route
-// so it works as a fully dynamic edge-rendered page on Cloudflare.
+export const dynamic = "force-dynamic";
 
-export default function BlogPostPage({
-  params,
-}: {
+interface Props {
   params: Promise<{ slug: string }>;
-}) {
-  const [post, setPost] = useState<BlogPost | null | "loading">("loading");
-  const [adjacent, setAdjacent] = useState<{ prev: BlogPost | null; next: BlogPost | null }>({
-    prev: null,
-    next: null,
-  });
-  const [slug, setSlug] = useState<string>("");
+}
 
-  useEffect(() => {
-    params.then((p) => setSlug(p.slug));
-  }, [params]);
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
+  if (!post) return {};
+  return {
+    title: `${post.title} | Stay NC500`,
+    description: post.excerpt,
+  };
+}
 
-  useEffect(() => {
-    if (!slug) return;
-    fetch(`/api/blog/${slug}`)
-      .then((r) => r.json())
-      .then(({ post: p, prev, next }) => {
-        setPost(p ?? null);
-        setAdjacent({ prev: prev ?? null, next: next ?? null });
-      })
-      .catch(() => setPost(null));
-  }, [slug]);
+export default async function BlogPostPage({ params }: Props) {
+  const { slug } = await params;
+  const [post, allPosts] = await Promise.all([getPostBySlug(slug), getAllPosts()]);
 
-  if (post === "loading") {
-    return (
-      <main className="min-h-screen bg-highland flex items-center justify-center">
-        <div className="text-mist text-sm tracking-widest uppercase animate-pulse">Loading…</div>
-      </main>
-    );
-  }
+  if (!post) notFound();
 
-  if (!post) {
-    return (
-      <main className="min-h-screen bg-highland flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-cream text-xl mb-4" style={{ fontFamily: "var(--font-display)" }}>
-            Post not found
-          </p>
-          <Link href="/blog" className="text-gold hover:text-gold-light text-sm transition-colors">
-            &larr; Back to blog
-          </Link>
-        </div>
-      </main>
-    );
-  }
+  const idx = allPosts.findIndex((p) => p.slug === slug);
+  const prev = idx < allPosts.length - 1 ? allPosts[idx + 1] : null; // older
+  const next = idx > 0 ? allPosts[idx - 1] : null;                   // newer
 
   const catStyle = categoryColours[post.category];
 
@@ -117,7 +90,7 @@ export default function BlogPostPage({
 
       {/* Article body */}
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <article className="blog-body">
+        <article>
           <ReactMarkdown
             components={{
               h2: ({ children }) => (
@@ -155,12 +128,8 @@ export default function BlogPostPage({
                   {children}
                 </a>
               ),
-              ul: ({ children }) => (
-                <ul className="mb-5 space-y-2">{children}</ul>
-              ),
-              ol: ({ children }) => (
-                <ol className="mb-5 space-y-2">{children}</ol>
-              ),
+              ul: ({ children }) => <ul className="mb-5 space-y-2">{children}</ul>,
+              ol: ({ children }) => <ol className="mb-5 space-y-2">{children}</ol>,
               li: ({ children }) => (
                 <li className="flex items-start gap-3 text-cream-dim text-base leading-relaxed">
                   <span className="text-gold mt-1 flex-shrink-0 text-xs">✦</span>
@@ -186,10 +155,8 @@ export default function BlogPostPage({
           </ReactMarkdown>
         </article>
 
-        {/* Divider */}
+        {/* CTA + nav */}
         <div className="mt-16 border-t border-dim pt-10">
-
-          {/* Booking CTA */}
           <div
             className="p-8 border border-dim text-center mb-10"
             style={{ background: "linear-gradient(135deg, #1a1530 0%, #131720 100%)" }}
@@ -200,7 +167,9 @@ export default function BlogPostPage({
             >
               Planning your NC500?
             </p>
-            <p className="text-mist text-sm mb-6">Find and book accommodation at every stop on the route.</p>
+            <p className="text-mist text-sm mb-6">
+              Find and book accommodation at every stop on the route.
+            </p>
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
                 href="/accommodation"
@@ -217,19 +186,20 @@ export default function BlogPostPage({
             </div>
           </div>
 
-          {/* Prev / next */}
           <div className="grid grid-cols-2 gap-px bg-dim">
             <div>
-              {adjacent.prev ? (
+              {prev ? (
                 <Link
-                  href={`/blog/${adjacent.prev.slug}`}
+                  href={`/blog/${prev.slug}`}
                   className="group flex items-start gap-4 bg-surface hover:bg-elevated p-6 transition-colors h-full"
                 >
-                  <span className="text-mist group-hover:text-gold text-lg transition-colors mt-0.5">&larr;</span>
+                  <span className="text-mist group-hover:text-gold text-lg transition-colors mt-0.5">
+                    &larr;
+                  </span>
                   <div>
                     <p className="text-mist text-xs uppercase tracking-widest mb-1">Older</p>
                     <p className="text-cream group-hover:text-gold-light transition-colors text-sm leading-snug">
-                      {adjacent.prev.title}
+                      {prev.title}
                     </p>
                   </div>
                 </Link>
@@ -238,18 +208,20 @@ export default function BlogPostPage({
               )}
             </div>
             <div>
-              {adjacent.next ? (
+              {next ? (
                 <Link
-                  href={`/blog/${adjacent.next.slug}`}
+                  href={`/blog/${next.slug}`}
                   className="group flex items-start justify-end gap-4 bg-surface hover:bg-elevated p-6 transition-colors h-full text-right"
                 >
                   <div>
                     <p className="text-mist text-xs uppercase tracking-widest mb-1">Newer</p>
                     <p className="text-cream group-hover:text-gold-light transition-colors text-sm leading-snug">
-                      {adjacent.next.title}
+                      {next.title}
                     </p>
                   </div>
-                  <span className="text-mist group-hover:text-gold text-lg transition-colors mt-0.5">&rarr;</span>
+                  <span className="text-mist group-hover:text-gold text-lg transition-colors mt-0.5">
+                    &rarr;
+                  </span>
                 </Link>
               ) : (
                 <div className="bg-surface p-6 h-full" />
@@ -258,7 +230,6 @@ export default function BlogPostPage({
           </div>
         </div>
       </div>
-
     </main>
   );
 }
