@@ -16,9 +16,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const town = getTownBySlug(slug);
   if (!town) return {};
+  const description = town.description.slice(0, 160);
   return {
-    title: `${town.name} — NC500 Guide | Stay NC500`,
-    description: town.description.slice(0, 160),
+    title: `${town.name} — NC500 Travel Guide`,
+    description,
+    alternates: { canonical: `https://www.staync500.com/towns/${slug}` },
+    openGraph: {
+      title: `${town.name} — NC500 Travel Guide`,
+      description,
+      type: "article",
+      url: `https://www.staync500.com/towns/${slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${town.name} — NC500 Travel Guide`,
+      description,
+    },
   };
 }
 

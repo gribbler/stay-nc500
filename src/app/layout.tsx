@@ -17,15 +17,39 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Stay NC500 — Accommodation & Travel Guide",
+  metadataBase: new URL("https://www.staync500.com"),
+  title: {
+    default: "Stay NC500 — Accommodation & Travel Guide",
+    template: "%s | Stay NC500",
+  },
   description:
     "Find hotels, B&Bs, self-catering, and camping along the North Coast 500 route in the Scottish Highlands. Explore towns, events, and plan your perfect NC500 trip.",
-  keywords: ["NC500", "North Coast 500", "Scotland accommodation", "Highland hotels", "Scottish Highlands travel"],
+  keywords: ["NC500", "North Coast 500", "Scotland accommodation", "Highland hotels", "Scottish Highlands travel", "NC500 itinerary", "Highlands road trip"],
   openGraph: {
     title: "Stay NC500 — Accommodation & Travel Guide",
     description:
       "Find accommodation and plan your journey along Scotland's legendary North Coast 500 route.",
     type: "website",
+    url: "https://www.staync500.com",
+    siteName: "Stay NC500",
+    locale: "en_GB",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Stay NC500 — Accommodation & Travel Guide",
+    description:
+      "Find accommodation and plan your journey along Scotland's legendary North Coast 500 route.",
+  },
+  alternates: {
+    canonical: "https://www.staync500.com",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
 };
 

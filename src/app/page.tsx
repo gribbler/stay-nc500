@@ -6,8 +6,26 @@ const featuredTownSlugs = ["inverness", "ullapool", "applecross", "durness", "th
 export default function HomePage() {
   const featured = towns.filter((t) => featuredTownSlugs.includes(t.slug));
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Stay NC500",
+    url: "https://www.staync500.com",
+    description:
+      "Find hotels, B&Bs, self-catering, and camping along the North Coast 500 route in the Scottish Highlands.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: "https://www.booking.com/searchresults.html?ss={search_term_string}%2C+Scotland&aid=2848401",
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* ── Hero ─────────────────────────────────────────────────────────── */}
       <section className="relative min-h-screen flex items-center overflow-hidden grain">

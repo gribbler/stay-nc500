@@ -21,8 +21,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = await getPostBySlug(slug);
   if (!post) return {};
   return {
-    title: `${post.title} | Stay NC500`,
+    title: post.title,
     description: post.excerpt,
+    alternates: { canonical: `https://www.staync500.com/blog/${slug}` },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      url: `https://www.staync500.com/blog/${slug}`,
+      publishedTime: post.publishedDate,
+      authors: ["Stay NC500"],
+      tags: [categoryLabels[post.category], "NC500", "North Coast 500", "Scottish Highlands"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+    },
   };
 }
 
@@ -38,8 +53,21 @@ export default async function BlogPostPage({ params }: Props) {
 
   const catStyle = categoryColours[post.category];
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.publishedDate,
+    dateModified: post.publishedDate,
+    author: { "@type": "Organization", name: "Stay NC500", url: "https://www.staync500.com" },
+    publisher: { "@type": "Organization", name: "Stay NC500", url: "https://www.staync500.com" },
+    mainEntityOfPage: { "@type": "WebPage", "@id": `https://www.staync500.com/blog/${post.slug}` },
+  };
+
   return (
     <main className="min-h-screen bg-highland">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Hero */}
       <section className="relative overflow-hidden grain border-b border-dim py-24">
