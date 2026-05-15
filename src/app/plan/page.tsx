@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { bookableItineraries } from "@/data/itinerary-stops";
 
@@ -35,7 +35,7 @@ function bookingUrl(town: string, checkin: Date, nights: number, adults: number)
   return `https://www.booking.com/searchresults.html?${params.toString()}`;
 }
 
-export default function PlanPage() {
+function PlanInner() {
   const searchParams = useSearchParams();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -294,5 +294,13 @@ export default function PlanPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function PlanPage() {
+  return (
+    <Suspense>
+      <PlanInner />
+    </Suspense>
   );
 }
