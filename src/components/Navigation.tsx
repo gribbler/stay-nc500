@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import ThistleIcon from "./ThistleIcon";
 
 const navLinks = [
   { href: "/accommodation", label: "Accommodation" },
@@ -22,7 +23,11 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <ThistleIcon
+              size={26}
+              className="text-gold group-hover:text-gold-light transition-colors flex-shrink-0"
+            />
             <span
               className="text-cream text-xl tracking-tight leading-none"
               style={{ fontFamily: "var(--font-display)", fontWeight: 700 }}
