@@ -30,6 +30,7 @@ export default function Footer() {
                 { href: "/accommodation", label: "Find Accommodation" },
                 { href: "/towns", label: "Towns & Places" },
                 { href: "/itineraries", label: "Itineraries" },
+                { href: "/blog", label: "Blog" },
                 { href: "/events", label: "Events" },
               ].map((l) => (
                 <li key={l.href}>

@@ -8,6 +8,7 @@ const navLinks = [
   { href: "/accommodation", label: "Accommodation" },
   { href: "/towns", label: "Towns & Places" },
   { href: "/itineraries", label: "Itineraries" },
+  { href: "/blog", label: "Blog" },
   { href: "/events", label: "Events" },
 ];
 

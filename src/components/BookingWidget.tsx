@@ -27,7 +27,7 @@ function buildBookingUrl(destination: string, checkIn?: string, checkOut?: strin
   });
   if (checkIn) params.set("checkin", checkIn);
   if (checkOut) params.set("checkout", checkOut);
-  if (AFFILIATE_ID !== "YOUR_AFFILIATE_ID") params.set("aid", AFFILIATE_ID);
+  params.set("aid", AFFILIATE_ID);
   return `https://www.booking.com/searchresults.html?${params.toString()}`;
 }
 
