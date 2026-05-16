@@ -15,7 +15,7 @@ export const towns: Town[] = [
     slug: "inverness",
     name: "Inverness",
     region: "Inverness-shire",
-    heroImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80&fit=crop",
+    heroImage: "https://images.unsplash.com/photo-1667723814056-9f1f78abb856?w=1200&q=80&fit=crop",
     description:
       "The capital of the Highlands and the traditional starting point of the NC500. Inverness sits at the mouth of the River Ness and is steeped in history, from Culloden Battlefield to the iconic Inverness Castle overlooking the city. It's the ideal base for stocking up, resting, and planning your journey north.",
     highlights: [
