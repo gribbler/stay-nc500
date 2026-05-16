@@ -96,21 +96,20 @@ export default function TownsPage() {
                     href={`/towns/${town.slug}`}
                     className="group bg-surface hover:bg-elevated overflow-hidden transition-colors block"
                   >
-                    {/* Coloured header */}
-                    <div
-                      className="h-36 relative overflow-hidden"
-                      style={{
-                        background:
-                          "linear-gradient(135deg, #1a1530 0%, #131720 70%, #0b1220 100%)",
-                      }}
-                    >
-                      <div
-                        className="absolute inset-0 opacity-30 group-hover:opacity-50 transition-opacity"
-                        style={{
-                          background:
-                            "radial-gradient(ellipse at 30% 70%, rgba(124,107,140,0.6) 0%, transparent 65%)",
-                        }}
-                      />
+                    {/* Photo header */}
+                    <div className="h-36 relative overflow-hidden">
+                      {town.heroImage ? (
+                        <div
+                          className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
+                          style={{ backgroundImage: `url('${town.heroImage}')` }}
+                        />
+                      ) : (
+                        <div
+                          className="absolute inset-0"
+                          style={{ background: "linear-gradient(135deg, #1a1530 0%, #131720 70%, #0b1220 100%)" }}
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
                       <div className="absolute bottom-0 left-0 right-0 p-5">
                         <h3
                           className="text-cream text-2xl group-hover:text-gold-light transition-colors"

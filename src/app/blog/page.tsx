@@ -5,7 +5,15 @@ import {
   categoryLabels,
   categoryColours,
   formatPostDate,
+  type PostCategory,
 } from "@/lib/contentful";
+
+const categoryPhotos: Record<PostCategory, string> = {
+  destination:   "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80&fit=crop",
+  "travel-tips": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800&q=80&fit=crop",
+  seasonal:      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80&fit=crop",
+  itinerary:     "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80&fit=crop",
+};
 
 export const dynamic = "force-dynamic";
 
@@ -25,12 +33,10 @@ export default async function BlogPage() {
       {/* Header */}
       <section className="relative overflow-hidden grain border-b border-dim py-20">
         <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 20% 60%, rgba(124,107,140,0.12) 0%, transparent 60%)",
-          }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80&fit=crop')" }}
         />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(11,14,21,0.88) 0%, rgba(11,14,21,0.72) 60%, rgba(26,21,48,0.68) 100%)" }} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <span className="rule-gold" />
           <p className="text-heather-light text-xs tracking-[0.2em] uppercase mb-4">Journal</p>
@@ -64,19 +70,12 @@ export default async function BlogPage() {
                 href={`/blog/${featured.slug}`}
                 className="group block bg-surface border border-dim hover:border-heather transition-colors mb-16 overflow-hidden"
               >
-                <div
-                  className="h-48 relative overflow-hidden"
-                  style={{
-                    background: "linear-gradient(135deg, #1a1530 0%, #0b0e15 60%, #0e1520 100%)",
-                  }}
-                >
+                <div className="h-64 relative overflow-hidden">
                   <div
-                    className="absolute inset-0 opacity-50 group-hover:opacity-70 transition-opacity"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse at 20% 60%, rgba(124,107,140,0.5) 0%, transparent 70%)",
-                    }}
+                    className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
+                    style={{ backgroundImage: `url('${categoryPhotos[featured.category]}')` }}
                   />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(11,14,21,0.90) 0%, rgba(11,14,21,0.40) 60%, transparent 100%)" }} />
                   <div className="absolute bottom-0 left-0 right-0 p-8">
                     <span className="text-heather-light text-xs tracking-[0.2em] uppercase">
                       Featured &mdash; {categoryLabels[featured.category]}
@@ -113,18 +112,23 @@ export default async function BlogPage() {
                     <Link
                       key={post.slug}
                       href={`/blog/${post.slug}`}
-                      className="group bg-surface hover:bg-elevated transition-colors flex flex-col"
+                      className="group bg-surface hover:bg-elevated transition-colors flex flex-col overflow-hidden"
                     >
-                      <div className={`h-px w-full ${style.dot} opacity-60`} />
-
-                      <div className="p-7 flex-1">
-                        <div className="flex items-center gap-2 mb-5">
+                      <div className="h-32 relative overflow-hidden">
+                        <div
+                          className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
+                          style={{ backgroundImage: `url('${categoryPhotos[post.category]}')` }}
+                        />
+                        <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(11,14,21,0.70) 0%, transparent 100%)" }} />
+                        <div className="absolute top-3 left-3 flex items-center gap-1.5">
                           <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${style.dot}`} />
-                          <span className={`text-xs border px-2 py-0.5 ${style.label}`}>
+                          <span className={`text-xs border px-2 py-0.5 ${style.label} backdrop-blur-sm`}>
                             {categoryLabels[post.category]}
                           </span>
                         </div>
+                      </div>
 
+                      <div className="p-7 flex-1">
                         <h2
                           className="text-cream text-xl mb-3 leading-snug group-hover:text-gold-light transition-colors"
                           style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}

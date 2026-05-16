@@ -58,20 +58,20 @@ export default async function TownPage({ params }: Props) {
 
       {/* Hero */}
       <section className="relative overflow-hidden grain border-b border-dim py-24">
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, #1a1530 0%, #0b0e15 60%, #0e1520 100%)",
-          }}
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 15% 55%, rgba(124,107,140,0.2) 0%, transparent 55%)",
-          }}
-        />
+        {town.heroImage ? (
+          <>
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url('${town.heroImage}')` }}
+            />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(11,14,21,0.88) 0%, rgba(11,14,21,0.72) 60%, rgba(26,21,48,0.65) 100%)" }} />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #1a1530 0%, #0b0e15 60%, #0e1520 100%)" }} />
+            <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse at 15% 55%, rgba(124,107,140,0.2) 0%, transparent 55%)" }} />
+          </>
+        )}
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <Link
             href="/towns"

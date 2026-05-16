@@ -15,6 +15,7 @@ export const towns: Town[] = [
     slug: "inverness",
     name: "Inverness",
     region: "Inverness-shire",
+    heroImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80&fit=crop",
     description:
       "The capital of the Highlands and the traditional starting point of the NC500. Inverness sits at the mouth of the River Ness and is steeped in history, from Culloden Battlefield to the iconic Inverness Castle overlooking the city. It's the ideal base for stocking up, resting, and planning your journey north.",
     highlights: [
@@ -34,6 +35,7 @@ export const towns: Town[] = [
     slug: "beauly",
     name: "Beauly",
     region: "Inverness-shire",
+    heroImage: "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200&q=80&fit=crop",
     description:
       "A charming small town 15 miles west of Inverness, Beauly takes its name from the French 'beau lieu' — beautiful place. It's home to the ruins of a 13th-century priory and makes a pleasant first stop heading north on the NC500.",
     highlights: [
@@ -51,6 +53,7 @@ export const towns: Town[] = [
     slug: "dingwall",
     name: "Dingwall",
     region: "Ross-shire",
+    heroImage: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=80&fit=crop",
     description:
       "One of Scotland's oldest royal burghs, Dingwall sits at the head of the Cromarty Firth and is often the first major town you pass through heading north. It was the birthplace of Macbeth and has strong Viking heritage.",
     highlights: [
@@ -68,6 +71,7 @@ export const towns: Town[] = [
     slug: "ullapool",
     name: "Ullapool",
     region: "Wester Ross",
+    heroImage: "https://images.unsplash.com/photo-1484910292437-025e5d13ce87?w=1200&q=80&fit=crop",
     description:
       "Ullapool is the largest settlement on the northwest coast and one of the most beloved stops on the NC500. This picturesque fishing village on the shores of Loch Broom offers stunning views, excellent seafood, a vibrant arts scene, and is the ferry gateway to the Outer Hebrides.",
     highlights: [
@@ -87,6 +91,7 @@ export const towns: Town[] = [
     slug: "gairloch",
     name: "Gairloch",
     region: "Wester Ross",
+    heroImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80&fit=crop",
     description:
       "Gairloch is a scattered community of villages around the shores of Loch Gairloch, boasting some of the finest beaches on the Scottish mainland. On a clear day, the views stretch to the Outer Hebrides. It's a popular base for exploring Torridon and the Beinn Eighe National Nature Reserve.",
     highlights: [
@@ -106,6 +111,7 @@ export const towns: Town[] = [
     slug: "torridon",
     name: "Torridon",
     region: "Wester Ross",
+    heroImage: "https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1200&q=80&fit=crop",
     description:
       "One of the most dramatic landscapes in Britain, Torridon is defined by its ancient red sandstone mountains — some of the oldest rock on Earth. Beinn Alligin, Liathach, and Beinn Eighe tower over a pristine loch, creating views that stop you in your tracks.",
     highlights: [
@@ -124,6 +130,7 @@ export const towns: Town[] = [
     slug: "applecross",
     name: "Applecross",
     region: "Wester Ross",
+    heroImage: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80&fit=crop",
     description:
       "Applecross is reached either via the legendary Bealach na Bà — one of the UK's highest mountain passes — or the stunning coastal road from Shieldaig. The remote village faces the Isle of Skye across the Inner Sound and has a real end-of-the-world feel that keeps visitors coming back.",
     highlights: [
@@ -143,6 +150,7 @@ export const towns: Town[] = [
     slug: "lochinver",
     name: "Lochinver",
     region: "Assynt, Sutherland",
+    heroImage: "https://images.unsplash.com/photo-1516570628389-492e1488089d?w=1200&q=80&fit=crop",
     description:
       "Lochinver is a working fishing port in the heart of Assynt — a landscape of extraordinary ancient mountains rising from flat moorland. The area around Lochinver is famous for its dramatic geology, freshwater lochs, and the distinctive sugar-loaf peak of Suilven.",
     highlights: [
@@ -161,6 +169,7 @@ export const towns: Town[] = [
     slug: "scourie",
     name: "Scourie",
     region: "Sutherland",
+    heroImage: "https://images.unsplash.com/photo-1687524926362-ca1e306b48cd?w=1200&q=80&fit=crop",
     description:
       "A small, peaceful village on the northwest coast with a beautiful sandy bay. Scourie is the gateway to Handa Island — a seabird reserve that hosts tens of thousands of puffins, guillemots, and razorbills each summer.",
     highlights: [
@@ -178,6 +187,7 @@ export const towns: Town[] = [
     slug: "durness",
     name: "Durness",
     region: "Sutherland",
+    heroImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=80&fit=crop",
     description:
       "Durness sits at the very northwest corner of mainland Britain, a remote and magnificent place where enormous sandy beaches meet towering sea cliffs. It was a childhood holiday destination of John Lennon, and the village celebrates this connection warmly.",
     highlights: [
@@ -198,6 +208,7 @@ export const towns: Town[] = [
     slug: "tongue",
     name: "Tongue",
     region: "Sutherland",
+    heroImage: "https://images.unsplash.com/photo-1610890690772-3f7fed4d7c80?w=1200&q=80&fit=crop",
     description:
       "Tongue is a beautiful village on the Kyle of Tongue, a long tidal sea loch on the north coast. The dramatic ruins of Castle Varrich sit above the village, and the causeway across the Kyle provides one of the most photogenic views on the entire route.",
     highlights: [
@@ -215,6 +226,7 @@ export const towns: Town[] = [
     slug: "thurso",
     name: "Thurso",
     region: "Caithness",
+    heroImage: "https://images.unsplash.com/photo-1729250036760-6764204a4f80?w=1200&q=80&fit=crop",
     description:
       "Thurso is the most northerly mainland town in Britain and a major hub on the NC500's north coast. It has a surprisingly good surf scene — Thurso East is one of Europe's premier reef breaks. The nearby Castle of Mey, the Queen Mother's beloved Highland home, is a must-visit.",
     highlights: [
@@ -233,6 +245,7 @@ export const towns: Town[] = [
     slug: "john-o-groats",
     name: "John o' Groats",
     region: "Caithness",
+    heroImage: "https://images.unsplash.com/photo-1720513221463-601783970256?w=1200&q=80&fit=crop",
     description:
       "Famous as the northeastern tip of mainland Britain, John o' Groats is an iconic milestone on the NC500 and is the traditional end (or start) of the Land's End to John o' Groats journey. The landscape here is vast and windswept, with ferries running to Orkney during summer.",
     highlights: [
@@ -250,6 +263,7 @@ export const towns: Town[] = [
     slug: "wick",
     name: "Wick",
     region: "Caithness",
+    heroImage: "https://images.unsplash.com/photo-1605558162119-2de4d9ff8130?w=1200&q=80&fit=crop",
     description:
       "Wick was once the herring capital of Europe, and its dramatic harbour and historic old town reflect that proud past. The Wick Heritage Museum is one of the finest community museums in Scotland, and the ruined castle at Girnigoe is spectacular.",
     highlights: [
@@ -268,6 +282,7 @@ export const towns: Town[] = [
     slug: "dornoch",
     name: "Dornoch",
     region: "Sutherland",
+    heroImage: "https://images.unsplash.com/photo-1652134210858-bf1984c5ad7c?w=1200&q=80&fit=crop",
     description:
       "Often described as one of Scotland's most beautiful small towns, Dornoch has a 13th-century cathedral, a royal golf course that has hosted The Open Championship, and a beach that stretches for miles. It feels a world away from the wild north coast.",
     highlights: [

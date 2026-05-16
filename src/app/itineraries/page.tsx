@@ -275,12 +275,10 @@ export default function ItinerariesPage() {
       {/* Header */}
       <section className="relative overflow-hidden grain border-b border-dim py-20">
         <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at 30% 60%, rgba(124,107,140,0.15) 0%, transparent 60%)",
-          }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=1600&q=80&fit=crop')" }}
         />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(11,14,21,0.90) 0%, rgba(11,14,21,0.75) 60%, rgba(26,21,48,0.70) 100%)" }} />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <span className="rule-gold" />
           <p className="text-heather-light text-xs tracking-[0.2em] uppercase mb-4">Route Planning</p>

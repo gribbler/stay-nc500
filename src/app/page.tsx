@@ -234,21 +234,20 @@ export default function HomePage() {
                 href={`/towns/${town.slug}`}
                 className="group bg-elevated hover:bg-panel overflow-hidden transition-colors block"
               >
-                {/* Atmospheric colour header */}
-                <div
-                  className="h-40 relative overflow-hidden"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #1a1530 0%, #131720 60%, #0b1220 100%)",
-                  }}
-                >
-                  <div
-                    className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity"
-                    style={{
-                      background:
-                        "radial-gradient(ellipse at 30% 60%, rgba(124,107,140,0.5) 0%, transparent 70%)",
-                    }}
-                  />
+                {/* Photo header */}
+                <div className="h-40 relative overflow-hidden">
+                  {town.heroImage ? (
+                    <div
+                      className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
+                      style={{ backgroundImage: `url('${town.heroImage}')` }}
+                    />
+                  ) : (
+                    <div
+                      className="absolute inset-0"
+                      style={{ background: "linear-gradient(135deg, #1a1530 0%, #131720 60%, #0b1220 100%)" }}
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-5">
                     <p className="text-heather-light text-xs tracking-[0.2em] uppercase mb-1">
                       {town.region}

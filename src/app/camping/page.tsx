@@ -65,13 +65,10 @@ export default function CampingPage() {
       {/* Hero */}
       <section className="relative overflow-hidden grain border-b border-dim py-24">
         <div
-          className="absolute inset-0"
-          style={{ background: "linear-gradient(135deg, #1a1530 0%, #0b0e15 60%, #0e1520 100%)" }}
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1600&q=80&fit=crop')" }}
         />
-        <div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 15% 55%, rgba(124,107,140,0.2) 0%, transparent 55%)" }}
-        />
+        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, rgba(11,14,21,0.85) 0%, rgba(11,14,21,0.65) 60%, rgba(14,26,18,0.70) 100%)" }} />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <span className="rule-gold" />
           <p className="text-heather-light text-xs tracking-[0.2em] uppercase mb-4">Camping & Glamping</p>
