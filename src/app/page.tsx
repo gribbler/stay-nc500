@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { towns } from "@/data/towns";
+import TripPlannerWidget from "@/components/TripPlannerWidget";
 
 const featuredTownSlugs = ["inverness", "ullapool", "applecross", "durness", "thurso", "dornoch"];
 
@@ -95,6 +96,8 @@ export default function HomePage() {
                 Explore the Route
               </Link>
             </div>
+
+            <TripPlannerWidget />
           </div>
         </div>
 

@@ -46,14 +46,33 @@ function PlanInner() {
     return bookableItineraries.find((i) => i.id === param)?.id ?? bookableItineraries[0].id;
   })();
 
+  const initialDate = (() => {
+    const param = searchParams.get("startDate");
+    if (param && /^\d{4}-\d{2}-\d{2}$/.test(param) && param >= toYMD(today)) return param;
+    return defaultDate;
+  })();
+
+  const initialAdults = (() => {
+    const n = parseInt(searchParams.get("adults") ?? "2");
+    return Number.isFinite(n) && n >= 1 && n <= 8 ? n : 2;
+  })();
+
   const [itineraryId, setItineraryId] = useState(initialItinerary);
-  const [startDate, setStartDate] = useState(defaultDate);
-  const [adults, setAdults] = useState(2);
+  const [startDate, setStartDate] = useState(initialDate);
+  const [adults, setAdults] = useState(initialAdults);
 
   useEffect(() => {
-    const param = searchParams.get("itinerary");
-    if (param && bookableItineraries.find((i) => i.id === param)) {
-      setItineraryId(param);
+    const itParam = searchParams.get("itinerary");
+    if (itParam && bookableItineraries.find((i) => i.id === itParam)) {
+      setItineraryId(itParam);
+    }
+    const dateParam = searchParams.get("startDate");
+    if (dateParam && /^\d{4}-\d{2}-\d{2}$/.test(dateParam) && dateParam >= toYMD(today)) {
+      setStartDate(dateParam);
+    }
+    const adultsParam = parseInt(searchParams.get("adults") ?? "");
+    if (Number.isFinite(adultsParam) && adultsParam >= 1 && adultsParam <= 8) {
+      setAdults(adultsParam);
     }
   }, [searchParams]);
 
